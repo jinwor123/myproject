@@ -20,5 +20,6 @@ from user import views as user_view
 
 urlpatterns = [
     path('', include('dashboard.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('register/', user_view.register, name='user-register'),
 ]
