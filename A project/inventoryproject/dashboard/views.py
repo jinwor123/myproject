@@ -17,7 +17,7 @@ def product(request):
         if form.is_valid():
             form.save()
             
-            return redirect('dashboard-prduct')
+            return redirect('dashboard-product')
     else:  
         form = ProductForm()
     

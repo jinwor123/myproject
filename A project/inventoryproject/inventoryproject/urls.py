@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('dashboard.urls')),
     #path('dashboard/', include('dashboard.urls')),
     path('register/', user_view.register, name='user-register'),
+    path('login/', user_view.login, name='user-login'),
 ]
