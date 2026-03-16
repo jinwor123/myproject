@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .models import Product,Category
-from .forms import ProductForm,CategoryForm
+from .models import Product,Category,unit
+from .forms import ProductForm,CategoryForm,unitForm
 
 # Create your views here.
 def index(request):
@@ -9,7 +9,7 @@ def index(request):
 def staff(request):
     return render (request,'dashboard/staff.html')
 def product(request):
-    """Display all products with inline add product form"""
+    
     products = Product.objects.all()
     
     if request.method == 'POST':
@@ -53,6 +53,32 @@ def delete_category(request, pk):
         category.delete()
         return redirect('dashboard-category') 
     return render(request, 'dashboard/category.html', {'item': category})
-   
+
+def add_unit(request):
+    """Display all units with inline add unit form"""
+    units = unit.objects.all()
+    
+    if request.method == 'POST':
+        form = unitForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard-unit')
+    else:  
+        form = unitForm()
+    
+    context = {
+        'units': units,
+        'form': form
+    }
+    return render(request, 'dashboard/unit.html', context)
+
+def delete_unit(request, pk):
+    """Delete a unit"""
+    unit = unit.objects.get(pk=pk)
+    if request.method == 'POST':
+        unit.delete()
+        return redirect('dashboard-unit') 
+    return render(request, 'dashboard/unit.html', {'item': unit})
+    
 def order(request):
     return render (request,'dashboard/order.html')

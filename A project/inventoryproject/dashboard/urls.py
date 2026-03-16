@@ -9,5 +9,8 @@ urlpatterns = [
     #path('product/add/', views.add_product, name='dashboard-add_product'),
     path('product/category/', views.add_category, name='dashboard-category'),
     path('category/<int:pk>/delete/', views.delete_category, name='delete-category'),
+    path('product/unit/', views.add_unit, name='dashboard-unit'),
+    path('unit/<int:pk>/delete/', views.delete_unit, name='delete-unit'),
     path('order/',views.order,name='dashboard-order'),
+    
 ]

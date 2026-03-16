@@ -46,7 +46,13 @@
                             </div>
                         {% endif %}
                     </div>
-                    
+                    <div class="form-group">
+                        <label><strong>Unit</strong></label>
+                        {{ form.unit }}
+                        <small class="form-text text-muted">
+                            หน่วยสินค้า (เช่น กล่อง, กิโลกรัม, ชิ้น)
+                        </small>
+                    </div>
                     <!-- SKU Field -->
                     <div class="form-group">
                         <label for="{{ form.sku.id_for_label }}">SKU</label>
@@ -96,44 +102,87 @@
                 </form>
             </div>
         </div>
+        <!-- RIGHT SIDE: Product List Table -->
         <div class="col-md-8">
-            <table class="table bg-white">
-                <thead class="bg-info">
-                    <tr class="text-white">
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Activity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if products %}
-                        {% for product in products %}
-                        <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.category.name }}</td>
-                            <td>{{ product.quantity }}</td>
-                            <td>฿{{ product.price }}</td>
-                            <td>
-                                <a class="btn btn-info btn-sm" href="">Edit</a>
-                                <a class="btn btn-danger btn-sm" href="">Delete</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">
-                                No products available
-                            </td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">📦 Products List</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <!-- ✅ เพิ่ม Unit Column -->
+                                <th>Unit</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if products %}
+                                {% for product in products %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ product.category.name }}</td>
+                                    
+                                    <!-- ✅ แสดง Unit -->
+                                    <td>
+                                        {% if product.unit %}
+                                            <span class="badge badge-info">
+                                                {{ product.unit.symbol }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    
+                                    <td>฿{{ product.price }}</td>
+                                    <td><strong>{{ product.quantity }}</strong></td>
+                                    
+                                    <td>
+                                        {% if product.is_in_stock %}
+                                            {% if product.is_low_stock %}
+                                                <span class="badge badge-warning">
+                                                    ⚠️ Low Stock
+                                                </span>
+                                            {% else %}
+                                                <span class="badge badge-success">
+                                                    ✅ In Stock
+                                                </span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="badge badge-danger">
+                                                ❌ Out of Stock
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    
+                                    <td>
+                                        <a class="btn btn-info btn-sm" href="">Edit</a>
+                                        <a class="btn btn-danger btn-sm" href="">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">
+                                        No products available. Add one!
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
 </div>
 
