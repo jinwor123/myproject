@@ -11,7 +11,7 @@ class Category(models.Model):
     
     def __str__(self):
         return self.name
-class unit(models.Model):
+class Unit(models.Model):
     
     name = models.CharField(max_length=50)
     symbol = models.CharField(max_length=10)
@@ -26,8 +26,9 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
-    unit = models.ForeignKey(unit, on_delete=models.PROTECT, null=True, blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, null=True, blank=True)
+    cost_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     description = models.TextField(blank=True)
     sku = models.CharField(max_length=50, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -40,3 +41,12 @@ class Product(models.Model):
     
     def is_low_stock(self):
         return 0 < self.quantity < 10
+    @property
+    def profit_per_unit(self):
+        return self.selling_price - self.cost_price
+    
+    @property
+    def profit_margin(self):
+        if self.cost_price == 0:
+            return 0
+        return (self.profit_per_unit / self.cost_price) * 100
