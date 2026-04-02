@@ -1,7 +1,7 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Product,Category,Unit
-from .forms import ProductForm,CategoryForm,UnitForm
+from .models import Product, Category, Unit
+from .forms import ProductForm, CategoryForm, UnitForm
 
 # Create your views here.
 def index(request):
@@ -26,6 +26,33 @@ def product(request):
         'form': form
     }
     return render(request, 'dashboard/product.html', context)
+
+def edit_product(request, pk):
+    """Edit product"""
+    product = get_object_or_404(Product, pk=pk)
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard-product')
+    else:
+        form = ProductForm(instance=product)
+    
+    context = {
+        'form': form,
+        'product': product,
+        'is_edit': True
+    }
+    return render(request, 'dashboard/product.html', context)
+
+def delete_product(request, pk):
+    """Delete product"""
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('dashboard-product')
+    return render(request, 'dashboard/product.html', {'product': product})
 
 def add_category(request):
     """Display all categories"""
