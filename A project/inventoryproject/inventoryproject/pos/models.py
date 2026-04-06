@@ -4,10 +4,15 @@ from dashboard.models import Product
 class POSSale(models.Model):
     """ใบขาย POS"""
     sale_no = models.CharField(max_length=50, unique=True)
-    customer_name = models.CharField(max_length=200, blank=True, null=True)
     total_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    is_cancelled = models.BooleanField(default=False)
+    cancelled_at = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.sale_no
     
     class Meta:
         ordering = ['-created_at']

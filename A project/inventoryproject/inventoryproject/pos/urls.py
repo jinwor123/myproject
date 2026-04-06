@@ -10,6 +10,8 @@ urlpatterns = [
     path('remove-from-cart/', views.remove_from_cart_api, name='pos-remove'),
     path('clear-cart/', views.clear_cart_api, name='pos-clear'),
     path('checkout/', views.checkout, name='pos-checkout'),
-     path('history/', views.sales_history, name='sales-history'),
-    path('receipt/<int:sale_id>/', views.receipt, name='receipt')
+    path('history/', views.sales_history, name='sales-history'),
+    path('receipt/<int:sale_id>/', views.receipt, name='receipt'),
+    path('receipt/<int:sale_id>/cancel/', views.cancel_receipt, name='cancel-receipt'),
+    
 ]

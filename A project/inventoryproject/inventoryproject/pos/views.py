@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.contrib import messages
+from django.db import transaction
 from django.utils import timezone
 from django.db.models import Q
 from dashboard.models import Product
@@ -155,12 +157,12 @@ def checkout(request):
         
         #คำนวณเงิน (เพียง total เท่านั้น)
         total_amount = sum(float(item['total']) for item in cart.values())
-        customer_name = request.POST.get('customer_name', '')
+        
         
         # สร้าง Sale
         sale = POSSale.objects.create(
             sale_no=f"POS-{int(timezone.now().timestamp())}",
-            customer_name=customer_name,
+            
             total_amount=total_amount,
         )
         
@@ -188,7 +190,7 @@ def checkout(request):
         request.session['pos_cart'] = {}
         request.session.modified = True
         
-        messages.success(request, f'ขายเสร็จแล้ว! เลขที่ {sale.sale_no}')
+        messages.success(request, f'Receipt เลขที่ {sale.sale_no}')
         return redirect('receipt', sale_id=sale.id)
     
     return redirect('cashier')
@@ -247,3 +249,31 @@ def update_cart_api(request):
             })
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request'})
+
+def sales_history(request):
+    sales = POSSale.objects.all().order_by('-created_at')
+    return render(request, 'dashboard/order.html', {'sales': sales})
+
+@require_POST
+@transaction.atomic
+def cancel_receipt(request, sale_id):
+    sale = get_object_or_404(POSSale, id=sale_id)
+
+    # กันยกเลิกซ้ำ
+    if sale.is_cancelled:
+        messages.warning(request, 'บิลนี้ถูกยกเลิกไปแล้ว')
+        return redirect('receipt', sale_id=sale.id)
+
+    # คืนสต็อก
+    for item in sale.items.select_related('product').all():
+        product = item.product
+        product.quantity += item.quantity
+        product.save()
+
+    #ตั้งสถานะยกเลิก
+    sale.is_cancelled = True
+    sale.cancelled_at = timezone.now()
+    sale.save()
+
+    messages.success(request, f'ยกเลิกบิล {sale.sale_no} เรียบร้อยแล้ว')
+    return redirect('receipt', sale_id=sale.id)

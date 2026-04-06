@@ -107,5 +107,3 @@ def delete_unit(request, pk):
         return redirect('dashboard-unit') 
     return render(request, 'dashboard/unit.html', {'item': unit})
     
-def order(request):
-    return render (request,'dashboard/order.html')

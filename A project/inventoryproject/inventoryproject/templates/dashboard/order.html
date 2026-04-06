@@ -1,61 +1,58 @@
 {% extends 'partials/base.html'%}
-{% block title %} Order page {% endblock %}
+{% block title %} Sales History {% endblock %}
 {% block content %}
 
 {% include 'partials/topnav.html'%}
-<!--Table-->
-<div class="container">
-    <div class="row my-4">
-        <div class="col-md-4">
 
-        </div>
-        <div class="col-md-8">
-            <table class="table bg-white">
-                <thead class="bg-info">
-                    <tr class="text-white">
-                        <th scope="col">#</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Order by</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>
-                            Broni
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>
-                            Kenneth
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                        <td>
-                            Cecilia
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="container my-4">
+  <div class="card shadow">
+    <div class="card-header bg-info text-white">
+      <h4 class="mb-0">ประวัติการขาย</h4>
     </div>
 
+    <div class="card-body">
+      {% if sales %}
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="bg-light">
+              <tr>
+                <th>#</th>
+                <th>เลขที่บิล</th>
+                <th>สถานะใบเสร็จ</th>
+                <th>ยอดรวม</th>
+                <th>เวลา</th>
+                <th>ดูบิล</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for sale in sales %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><strong>{{ sale.sale_no }}</strong></td>
+                <td>
+                    {% if sale.is_cancelled %}
+                      <span class="badge badge-danger">ยกเลิก</span>
+                    {% else %}
+                      <span class="badge badge-success">ปกติ</span>
+                    {% endif %}
+                  </td>
+                <td>฿{{ sale.total_amount|floatformat:0 }}</td>
+                <td><small>{{ sale.created_at|date:"d/m/Y H:i" }}</small></td>
+                <td>
+                  <a class="btn btn-sm btn-success" href="{% url 'receipt' sale.id %}">
+                    เปิดใบเสร็จ
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted text-center mb-0">ยังไม่มีรายการขาย</p>
+      {% endif %}
+    </div>
+  </div>
 </div>
 
-
-
-<!--End Table-->
 {% endblock %}

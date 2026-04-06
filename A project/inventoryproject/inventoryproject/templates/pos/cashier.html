@@ -56,7 +56,7 @@
                                             <button class="btn btn-success add-to-cart-btn" 
                                                     type="button"
                                                     data-product-id="{{ product.id }}">
-                                                ➕
+                                                add
                                             </button>
                                         </div>
                                     </div>
@@ -70,12 +70,20 @@
         </div>
         
         <!-- RIGHT: Cart & Checkout -->
+
         <div class="col-md-4">
             <div class="card shadow">
                 <div class="card-header bg-info text-white">
                     <h5 class="mb-0"> ตะกร้า <span class="badge badge-light" id="cartCount">{{ cart_count }}</span></h5>
                 </div>
-                
+
+                <div class="card shadow mb-3">
+                    <div class="card-body py-2">
+                        <small class="text-muted">
+                            เวลา: <span id="clock"></span>
+                        </small>
+                    </div>
+                </div>
                 <!-- Cart Items -->
                 <div class="card-body" style="max-height: 400px; overflow-y: auto;">
                     <table class="table table-sm" id="cartTable">
@@ -215,6 +223,21 @@
             console.error('Error:', error);
         }
     });
+    //Clock
+    function pad2(n) { return n.toString().padStart(2, '0'); }
+    function updateClock() {
+    const d = new Date();
+    const day = pad2(d.getDate());
+    const month = pad2(d.getMonth() + 1);
+    const year = d.getFullYear();
+    const h = pad2(d.getHours());
+    const m = pad2(d.getMinutes());
+    const s = pad2(d.getSeconds());
+    const el = document.getElementById('clock');
+    if (el) el.textContent = `${day}/${month}/${year} ${h}:${m}:${s}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
 
     // ==================== ADD TO CART ====================
     function attachAddToCartEvents() {

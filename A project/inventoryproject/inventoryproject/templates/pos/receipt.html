@@ -9,7 +9,7 @@
         <div class="col-md-6 offset-md-3">
             <div class="card shadow">
                 <div class="card-header bg-success text-white">
-                    <h4 class="mb-0">✅ ขายเสร็จแล้ว!</h4>
+                    <h4 class="mb-0">Receipt</h4>
                 </div>
                 <div class="card-body">
                     <p class="text-center mb-3">
@@ -46,7 +46,7 @@
                     
                     <p class="text-muted text-center mb-3">
                         <small>
-                            วิธีชำระ: 💵 เงินสด<br>
+                            วิธีชำระ:เงินสด<br>
                             เวลา: {{ sale.created_at|date:"d/m/Y H:i:s" }}
                         </small>
                     </p>
@@ -58,6 +58,20 @@
                         <button onclick="window.print()" class="btn btn-primary btn-lg">
                             print
                         </button>
+                     <!-- ปุ่มยกเลิกใบเสร็จ -->
+                        {% if not sale.is_cancelled %}
+                        <form method="POST" action="{% url 'cancel-receipt' sale.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button class="btn btn-danger btn-lg" type="submit"
+                                    onclick="return confirm('ยืนยันยกเลิกบิลนี้? ระบบจะคืนสต็อกสินค้า')">
+                            ยกเลิกใบเสร็จ
+                            </button>
+                        </form>
+                        {% else %}
+                            <div class="alert alert-danger mt-3">
+                            บิลนี้ถูกยกเลิกแล้ว{% if sale.cancelled_at %} ({{ sale.cancelled_at|date:"d/m/Y H:i" }}){% endif %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
