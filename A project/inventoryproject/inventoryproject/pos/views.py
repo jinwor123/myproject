@@ -161,6 +161,7 @@ def checkout(request):
         
         # สร้าง Sale
         sale = POSSale.objects.create(
+            #epoch 1970-01-01
             sale_no=f"POS-{int(timezone.now().timestamp())}",
             
             total_amount=total_amount,
