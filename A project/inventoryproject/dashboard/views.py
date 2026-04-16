@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Sum
 from django.http import HttpResponse
 from .models import Product, Category, Unit
 from .forms import ProductForm, CategoryForm, UnitForm
+from pos.models import POSSaleItem
 
 # Create your views here.
 def index(request):
     return render(request,'dashboard/index.html')
-def staff(request):
-    return render (request,'dashboard/staff.html')
+
 def product(request):
     
     products = Product.objects.all()
@@ -106,6 +107,19 @@ def delete_unit(request, pk):
         unit.delete()
         return redirect('dashboard-unit') 
     return render(request, 'dashboard/unit.html', {'item': unit})
+
+def sales_summary(request):
+    # สรุปยอดขายรายสินค้า (ทุกเวลา)
+    summary = (
+        POSSaleItem.objects
+        .values('product__id', 'product__name', 'product__category__name')
+        .annotate(
+            total_qty=Sum('quantity'),
+            total_amount=Sum('total_price'),
+        )
+        .order_by('-total_amount')
+    )
+
+    context = {'summary': summary}
+    return render(request, 'dashboard/staff.html', context)
     
-def order(request):
-    return render (request,'dashboard/order.html')

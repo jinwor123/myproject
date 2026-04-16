@@ -1,6 +1,6 @@
 from django import forms
 from .models import Product,Category,Unit
-from django.contrib.auth.models import User
+
 
 # from ของ product
 class ProductForm(forms.ModelForm):
