@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'user.apps.UserConfig',
     'pos.apps.PosConfig',
-    'crispy_forms',
-    'crispy_bootstrap4'
+    
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 

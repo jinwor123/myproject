@@ -202,11 +202,8 @@ def receipt(request, sale_id):
     context = {'sale': sale}
     return render(request, 'pos/receipt.html', context)
 
-def sales_history(request):
-    """ประวัติการขาย"""
-    sales = POSSale.objects.all()
-    context = {'sales': sales}
-    return render(request, 'pos/sales_history.html', context)
+
+
 
 def update_cart_api(request):
     """อัปเดตจำนวนสินค้า (AJAX)"""

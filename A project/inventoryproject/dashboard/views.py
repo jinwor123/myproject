@@ -7,6 +7,7 @@ from pos.models import POSSaleItem
 
 # Create your views here.
 def index(request):
+    
     return render(request,'dashboard/index.html')
 
 def product(request):
