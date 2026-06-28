@@ -1,6 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/R0mj41T3)
-**<ins>Note</ins>: Students must update this `README.md` file to be an installation manual or a README file for their own CS403 projects.**
-
 **รหัสโครงงาน:** 68-1_14_nrc-r1
 
 **ชื่อโครงงาน (ไทย):** ระบบจัดการข้อมูลเพื่อการบริหารธุรกิจร้านค้าอาหารสัตว์
